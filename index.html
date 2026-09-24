@@ -1,1 +1,425 @@
-Hello!
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Расписание занятий — 1 курс ИАОГУ (заочная форма), установочная сессия 2026/2027</title>
+<style>
+  :root{
+    --bg:#eef1f7; --panel:#fff; --line:#dde3ee; --ink:#1b2333; --muted:#66748c;
+    --brand:#17457f; --brand2:#2f6fb8;
+    --shadow:0 1px 2px rgba(23,69,127,.06),0 10px 28px rgba(23,69,127,.09);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:24px 16px 60px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:14px; line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1500px;margin:0 auto}
+  header.head{
+    background:linear-gradient(135deg,#17457f 0%,#2f6fb8 100%);
+    color:#fff; border-radius:16px; padding:22px 26px; box-shadow:var(--shadow);
+  }
+  header.head .uni{font-size:13px;letter-spacing:.04em;text-transform:uppercase;opacity:.85}
+  header.head h1{margin:8px 0 4px;font-size:22px;font-weight:700;letter-spacing:.01em}
+  header.head h2{margin:0;font-size:15px;font-weight:500;opacity:.95;line-height:1.5}
+  header.head .facts{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+  header.head .facts span{
+    background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25);
+    border-radius:999px; padding:4px 12px; font-size:12.5px;
+  }
+  .controls{
+    display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between;
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:12px 16px; margin:18px 0; box-shadow:var(--shadow);
+  }
+  .ctrl-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .ctrl-group .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-right:2px}
+  .btn{
+    border:1px solid var(--line); background:#f7f9fc; color:var(--ink);
+    padding:7px 14px; border-radius:9px; font-size:13px; font-weight:600;
+    cursor:pointer; transition:.15s; font-family:inherit;
+  }
+  .btn:hover{background:#eaf0f9;border-color:#c6d4e8}
+  .btn.active{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 3px 10px rgba(23,69,127,.28)}
+  .btn.small{padding:5px 11px;font-size:12.5px}
+  .week-title{
+    display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+    margin:0 4px 12px;
+  }
+  .week-title .num{font-size:18px;font-weight:700;color:var(--brand)}
+  .week-title .dates{font-size:14px;color:var(--muted);font-weight:500}
+  .grid-wrap{overflow-x:auto;border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--line)}
+  table.grid{width:100%;min-width:1180px;border-collapse:separate;border-spacing:0;background:#fff}
+  table.grid thead th{
+    background:#f4f7fc; color:var(--brand); font-size:13px; font-weight:700;
+    padding:10px 8px; border-bottom:2px solid #d9e3f2; border-right:1px solid var(--line);
+    text-align:center; vertical-align:middle; position:sticky; top:0; z-index:2;
+  }
+  table.grid thead th:last-child{border-right:none}
+  table.grid thead th .d-date{font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
+  table.grid thead th.th-time{width:104px;min-width:104px;text-align:left;padding-left:14px}
+  table.grid tbody th.th-time{
+    background:#fafcff; border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:10px 14px; text-align:left; font-weight:600; vertical-align:top; width:104px; min-width:104px;
+  }
+  .slot-n{display:block;font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+  .slot-t{display:block;font-size:13.5px;color:var(--brand);font-weight:700;margin-top:3px;white-space:nowrap}
+  table.grid td{
+    border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:6px; vertical-align:top; width:calc((100% - 104px)/6);
+  }
+  table.grid td:last-child{border-right:none}
+  table.grid tr:last-child th, table.grid tr:last-child td{border-bottom:none}
+  table.grid td.empty{background:repeating-linear-gradient(45deg,#fbfcfe,#fbfcfe 6px,#f6f8fc 6px,#f6f8fc 12px)}
+  .lesson{
+    border-left:3px solid var(--c);
+    background:var(--bg);
+    border-radius:0 8px 8px 0;
+    padding:6px 9px 7px;
+    margin-bottom:5px;
+  }
+  .lesson:last-child{margin-bottom:0}
+  .l-top{display:flex;align-items:baseline;gap:6px;justify-content:space-between}
+  .l-name{font-weight:700;color:var(--c);font-size:12.5px;line-height:1.25}
+  .l-kind{
+    flex:none;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+    background:var(--c);color:#fff;border-radius:5px;padding:1px 6px;
+  }
+  .l-teacher{font-size:12px;color:#41506b;margin-top:3px}
+  .l-bottom{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap}
+  .l-room{font-size:11.5px;font-weight:600;color:#41506b;background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  .l-group{
+    font-size:10.5px;font-weight:700;letter-spacing:.03em;color:#fff;background:#8a97ab;
+    border-radius:5px;padding:1px 7px;
+  }
+  .l-group.stream{background:#5a6c8a}
+  .legend{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow)}
+  .legend h3{margin:0 0 14px;font-size:16px;color:var(--brand)}
+  .legend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+  .leg-item{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;background:#fafcff;border:1px solid #eef2f9}
+  .leg-abbr{
+    flex:none;min-width:58px;text-align:center;font-size:11.5px;font-weight:800;letter-spacing:.03em;
+    color:#fff;background:var(--c);border-radius:7px;padding:5px 6px;
+  }
+  .leg-text{font-size:12.5px;line-height:1.4}
+  .leg-text b{display:block;font-size:13px;color:var(--ink)}
+  .leg-text span{color:var(--muted)}
+  .notes{margin-top:16px;font-size:12.5px;color:var(--muted);line-height:1.6}
+  .notes b{color:var(--ink)}
+  @media (max-width:760px){
+    body{padding:14px 8px 40px}
+    header.head{padding:18px}
+    header.head h1{font-size:18px}
+    .controls{padding:10px}
+  }
+  @media print{
+    body{background:#fff;padding:0;font-size:11px}
+    .controls{display:none}
+    .grid-wrap{box-shadow:none;border:none;overflow:visible}
+    table.grid{min-width:0;width:100%}
+    header.head{background:#17457f !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .lesson{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .legend{box-shadow:none;page-break-before:always}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="uni">Академия управления при Президенте Республики Беларусь</div>
+    <h1>Расписание учебных занятий · 2026/2027 учебный год</h1>
+    <h2>
+      Институт управленческих кадров<br>
+      Специальность 6-05-0414-06 «Информационно-аналитическое обеспечение государственного управления»<br>
+      Заочная форма получения образования на базе высшего образования · 1 курс · Установочная сессия
+    </h2>
+    <div class="facts">
+      <span>Занятия в корпусе №1 (ул. Московская, 17)</span>
+      <span>Поток: 1в2601ИАОГУ · 1в2602ИАОГУ · 1в2603ИАОГУ</span>
+      <span>Утверждено 07.09.2026</span>
+    </div>
+  </header>
+  <div class="controls">
+    <div class="ctrl-group">
+      <span class="lbl">Неделя</span>
+      <button class="btn active" data-week="1">I неделя · 21.09–26.09</button>
+      <button class="btn" data-week="2">II неделя · 28.09–03.10</button>
+    </div>
+    <div class="ctrl-group">
+      <span class="lbl">Группа</span>
+      <button class="btn small active" data-group="all">Все</button>
+      <button class="btn small" data-group="1в2601">1в2601</button>
+      <button class="btn small" data-group="1в2602">1в2602</button>
+      <button class="btn small" data-group="1в2603">1в2603</button>
+    </div>
+  </div>
+  <div class="week-title">
+    <span class="num" id="wkNum">I неделя</span>
+    <span class="dates" id="wkDates">21.09.2026 – 26.09.2026</span>
+  </div>
+  <div class="grid-wrap">
+    <table class="grid" id="grid"></table>
+  </div>
+  <section class="legend">
+    <h3>Изучаемые дисциплины и преподаватели</h3>
+    <div class="legend-grid" id="legendGrid"></div>
+    <div class="notes">
+      <b>Сокращения:</b> л — лекция, пз — практическое занятие, сз — семинарское занятие, лаб — лабораторная работа, а. — аудитория.<br>
+      <b>Деловой иностранный язык (ДИЯ)</b> — занятия проводятся согласно расписанию кафедры языковой коммуникации, каб. 806а.<br>
+      <b>Примечание:</b> записи с меткой <i>«поток»</i> относятся ко всем трём группам (в исходном файле — объединённая ячейка).
+    </div>
+  </section>
+</div>
+<script>
+/* ==================== ДАННЫЕ ==================== */
+const G1='1в2601', G2='1в2602', G3='1в2603';
+function L(d,k,p,r,g){return {d:d, k:k, p:p||'', r:r||'', g:g||'all'};}
+const DAYS = [
+  {key:'mon', name:'Понедельник', w1:'21.09', w2:'28.09'},
+  {key:'tue', name:'Вторник',     w1:'22.09', w2:'29.09'},
+  {key:'wed', name:'Среда',       w1:'23.09', w2:'30.09'},
+  {key:'thu', name:'Четверг',     w1:'24.09', w2:'01.10'},
+  {key:'fri', name:'Пятница',     w1:'25.09', w2:'02.10'},
+  {key:'sat', name:'Суббота',     w1:'26.09', w2:'03.10'}
+];
+const SLOTS = [
+  {n:1, time:'08:30–09:55'},
+  {n:2, time:'10:05–11:30'},
+  {n:3, time:'11:50–13:15'},
+  {n:4, time:'13:25–14:50'},
+  {n:5, time:'15:00–16:25'},
+  {n:6, time:'16:35–18:00'},
+  {n:7, time:'18:20–19:45'},
+  {n:8, time:'19:55–21:20'}
+];
+const DISC = {
+  'Введение в специальность':                             {abbr:'ВС',   c:'#db2777', bg:'#fdeef5'},
+  'История белорусской государственности':                {abbr:'ИБГ',  c:'#c2410c', bg:'#fff1e9'},
+  'Основы микро- и макроэкономики':                       {abbr:'ОММЭ', c:'#0e7490', bg:'#e6f6fa'},
+  'Менеджмент':                                           {abbr:'МТ',   c:'#a16207', bg:'#fdf5e3'},
+  'Деловой иностранный язык':                             {abbr:'ДИЯ',  c:'#4d7c0f', bg:'#f1f9e6'},
+  'Алгоритмизация и технологии программирования':         {abbr:'АиТП', c:'#1d4ed8', bg:'#eaf0ff'},
+  'Прикладная информатика':                               {abbr:'ПИ',   c:'#7e22ce', bg:'#f7ecfe'},
+  'Архитектура вычислительных систем':                    {abbr:'АВС',  c:'#be123c', bg:'#ffeef2'},
+  'Современная политэкономия':                            {abbr:'СП',   c:'#0f766e', bg:'#e6f5f3'}
+};
+/* ---------- I неделя (21.09 – 26.09.2026) ---------- */
+const WEEK1 = {
+  mon: {
+    4:[L('Введение в специальность','л','Ткалич Т.А.','а.111')],
+    5:[L('История белорусской государственности','л','Дук Д.В.','а.111')],
+    6:[L('Деловой иностранный язык','пз')],
+    7:[L('Деловой иностранный язык','пз')],
+    8:[L('Основы микро- и макроэкономики','л','Шаркова О.Э.','а.609')]
+  },
+  tue: {
+    4:[L('Введение в специальность','л','Ткалич Т.А.','а.111')],
+    5:[L('История белорусской государственности','л','Дук Д.В.','а.111')],
+    6:[L('История белорусской государственности','л','Дук Д.В.','а.111')],
+    7:[L('Прикладная информатика','л','Виноградова И.В.','а.103')],
+    8:[L('Прикладная информатика','л','Виноградова И.В.','а.103')]
+  },
+  wed: {
+    4:[L('Архитектура вычислительных систем','л','Перепелица А.А.','а.103')],
+    5:[L('Архитектура вычислительных систем','л','Перепелица А.А.','а.103')],
+    6:[L('Деловой иностранный язык','пз')],
+    7:[L('Деловой иностранный язык','пз')],
+    8:[L('Основы микро- и макроэкономики','л','Шаркова О.Э.','а.609')]
+  },
+  thu: {
+    4:[L('Архитектура вычислительных систем','л','Перепелица А.А.','а.103')],
+    5:[L('Современная политэкономия','л','Золотарева О.А.','а.103')],
+    6:[L('Современная политэкономия','л','Золотарева О.А.','а.103')],
+    7:[L('Основы микро- и макроэкономики','л','Шаркова О.Э.','а.103')],
+    8:[L('Основы микро- и макроэкономики','л','Шаркова О.Э.','а.103')]
+  },
+  fri: {
+    4:[L('Алгоритмизация и технологии программирования','л','Щербович Ж.И.','а.103')],
+    5:[L('Современная политэкономия','л','Золотарева О.А.','а.103')],
+    6:[L('Менеджмент','л','Брасс А.А.','а.103')],
+    7:[L('Менеджмент','л','Брасс А.А.','а.103')],
+    8:[L('Основы микро- и макроэкономики','л','Шаркова О.Э.','а.103')]
+  },
+  sat: {
+    1:[L('Деловой иностранный язык','пз')],
+    2:[L('Деловой иностранный язык','пз')],
+    3:[L('Алгоритмизация и технологии программирования','л','Щербович Ж.И.','а.909')],
+    4:[L('Алгоритмизация и технологии программирования','л','Щербович Ж.И.','а.909')]
+  }
+};
+/* ---------- II неделя (28.09 – 03.10.2026) ---------- */
+const WEEK2 = {
+  mon: {
+    4:[L('Прикладная информатика','л','Виноградова И.В.','а.909')],
+    5:[L('Прикладная информатика','л','Виноградова И.В.','а.909')],
+    6:[L('Деловой иностранный язык','пз')],
+    7:[L('Деловой иностранный язык','пз')],
+    8:[L('Основы микро- и макроэкономики','л','Шаркова О.Э.','а.909')]
+  },
+  tue: {
+    4:[L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G1),
+       L('Архитектура вычислительных систем','лаб','Макарова Л.Н., Судник О.А.','а.513, 514',G2),
+       L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G3)],
+    5:[L('История белорусской государственности','сз','Самусик А.Ф.','а.611',G1),
+       L('Архитектура вычислительных систем','лаб','Макарова Л.Н., Судник О.А.','а.513, 514',G2),
+       L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G3)],
+    6:[L('История белорусской государственности','сз','Самусик А.Ф.','а.611',G1),
+       L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G2),
+       L('Основы микро- и макроэкономики','пз','Шаркова О.Э.','а.708',G3)],
+    7:[L('Основы микро- и макроэкономики','пз','Шаркова О.Э.','а.708',G1),
+       L('История белорусской государственности','сз','Самусик А.Ф.','а.611',G2),
+       L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G3)],
+    8:[L('Основы микро- и макроэкономики','пз','Шаркова О.Э.','а.708',G1),
+       L('История белорусской государственности','сз','Самусик А.Ф.','а.611',G2),
+       L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G3)]
+  },
+  wed: {
+    4:[L('Современная политэкономия','сз','Маслак Д.А.','а.611',G1),
+       L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G2)],
+    5:[L('Современная политэкономия','сз','Маслак Д.А.','а.611',G1),
+       L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G2),
+       L('Архитектура вычислительных систем','лаб','Макарова Л.Н., Судник О.А.','а.513, 514',G3)],
+    6:[L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G1),
+       L('Основы микро- и макроэкономики','пз','Шаркова О.Э.','а.611',G2),
+       L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G3)],
+    7:[L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G1),
+       L('Основы микро- и макроэкономики','пз','Шаркова О.Э.','а.611',G2),
+       L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G3)],
+    8:[L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G1),
+       L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G2),
+       L('Основы микро- и макроэкономики','пз','Шаркова О.Э.','а.611',G3)]
+  },
+  thu: {
+    4:[L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G1),
+       L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G3)],
+    5:[L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G1),
+       L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G2),
+       L('Архитектура вычислительных систем','лаб','Макарова Л.Н., Судник О.А.','а.513, 514',G3)],
+    6:[L('Деловой иностранный язык','пз')],
+    7:[L('Деловой иностранный язык','пз')],
+    8:[L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G2)]
+  },
+  fri: {
+    4:[L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G2)],
+    5:[L('Деловой иностранный язык','пз')],
+    6:[L('Деловой иностранный язык','пз')],
+    7:[L('Архитектура вычислительных систем','лаб','Макарова Л.Н., Судник О.А.','а.513, 514',G1),
+       L('Современная политэкономия','сз','Маслак Д.А.','а.611',G2),
+       L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G3)],
+    8:[L('Архитектура вычислительных систем','лаб','Макарова Л.Н., Судник О.А.','а.513, 514',G1),
+       L('Современная политэкономия','сз','Маслак Д.А.','а.611',G2),
+       L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G3)]
+  },
+  sat: {
+    1:[L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G1),
+       L('Современная политэкономия','сз','Маслак Д.А.','а.611',G3)],
+    2:[L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G1),
+       L('Современная политэкономия','сз','Маслак Д.А.','а.611',G3)],
+    3:[L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G1),
+       L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G2),
+       L('История белорусской государственности','сз','Самусик А.Ф.','а.611',G3)],
+    4:[L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G1),
+       L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G2),
+       L('История белорусской государственности','сз','Самусик А.Ф.','а.611',G3)],
+    5:[L('Прикладная информатика','лаб','Виноградова И.В., Юранова Т.И.','а.508, 512',G2),
+       L('Алгоритмизация и технологии программирования','лаб','Щербович Ж.И., Юрча И.А.','а.505, 506',G3)]
+  }
+};
+/* ---------- Список дисциплин (легенда) ---------- */
+const DISC_LIST = [
+  {a:'СП',   d:'Современная политэкономия', t:'профессор Золотарева О.А. (лекции), старший преподаватель Маслак Д.А. (сз)'},
+  {a:'ИБГ',  d:'История белорусской государственности', t:'профессор Дук Д.В. (лекции), доцент Самусик А.Ф. (сз)'},
+  {a:'ОММЭ', d:'Основы микро- и макроэкономики', t:'старший преподаватель Шаркова О.Э.'},
+  {a:'МТ',   d:'Менеджмент', t:'доцент Брасс А.А.'},
+  {a:'ДИЯ',  d:'Деловой иностранный язык', t:'согласно расписанию кафедры языковой коммуникации, каб. 806а'},
+  {a:'АиТП', d:'Алгоритмизация и технологии программирования', t:'старший преподаватель Щербович Ж.И. (лекции, лаб.), старший преподаватель Юрча И.А. (лаб.)'},
+  {a:'ПИ',   d:'Прикладная информатика', t:'старший преподаватель Виноградова И.В. (лекции, лаб.), преподаватель Юранова Т.И. (лаб.)'},
+  {a:'АВС',  d:'Архитектура вычислительных систем', t:'доцент Перепелица А.А. (лекции), доцент Макарова Л.Н. (лаб.), преподаватель Судник О.А. (лаб.)'},
+  {a:'ВС',   d:'Введение в специальность', t:'профессор Ткалич Т.А.'}
+];
+/* ==================== ЛОГИКА ==================== */
+const state = {week:1, group:'all'};
+const gridEl = document.getElementById('grid');
+const wkNumEl = document.getElementById('wkNum');
+const wkDatesEl = document.getElementById('wkDates');
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function lessonHTML(l){
+  const info = DISC[l.d] || {c:'#475569', bg:'#f1f5f9'};
+  const groupBadge = (l.g === 'all')
+      ? '<span class="l-group stream">поток</span>'
+      : '<span class="l-group">' + esc(l.g) + '</span>';
+  return '<div class="lesson" style="--c:' + info.c + ';--bg:' + info.bg + '">'
+       +   '<div class="l-top">'
+       +     '<span class="l-name">' + esc(l.d) + '</span>'
+       +     '<span class="l-kind">' + esc(l.k) + '</span>'
+       +   '</div>'
+       +   (l.p ? '<div class="l-teacher">' + esc(l.p) + '</div>' : '')
+       +   '<div class="l-bottom">'
+       +     (l.r ? '<span class="l-room">' + esc(l.r) + '</span>' : '<span></span>')
+       +     groupBadge
+       +   '</div>'
+       + '</div>';
+}
+function render(){
+  const wk = state.week;
+  const data = (wk === 1) ? WEEK1 : WEEK2;
+  wkNumEl.textContent = (wk === 1 ? 'I неделя' : 'II неделя');
+  wkDatesEl.textContent = (wk === 1 ? '21.09.2026 – 26.09.2026' : '28.09.2026 – 03.10.2026');
+  let html = '<thead><tr><th class="th-time">Время</th>';
+  DAYS.forEach(function(d){
+    const date = (wk === 1 ? d.w1 : d.w2);
+    html += '<th>' + esc(d.name) + '<div class="d-date">' + date + '.2026</div></th>';
+  });
+  html += '</tr></thead><tbody>';
+  SLOTS.forEach(function(s){
+    html += '<tr><th class="th-time"><span class="slot-n">' + s.n + ' пара</span>'
+          + '<span class="slot-t">' + s.time + '</span></th>';
+    DAYS.forEach(function(d){
+      const list = (data[d.key] && data[d.key][s.n]) || [];
+      const shown = list.filter(function(l){
+        return l.g === 'all' || state.group === 'all' || l.g === state.group;
+      });
+      if (!shown.length){
+        html += '<td class="empty"></td>';
+        return;
+      }
+      html += '<td>' + shown.map(lessonHTML).join('') + '</td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  gridEl.innerHTML = html;
+}
+function renderLegend(){
+  document.getElementById('legendGrid').innerHTML = DISC_LIST.map(function(x){
+    const info = DISC[x.d] || {c:'#475569'};
+    return '<div class="leg-item">'
+         +   '<div class="leg-abbr" style="--c:' + info.c + '">' + esc(x.a) + '</div>'
+         +   '<div class="leg-text"><b>' + esc(x.d) + '</b><span>' + esc(x.t) + '</span></div>'
+         + '</div>';
+  }).join('');
+}
+document.querySelectorAll('[data-week]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('[data-week]').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    state.week = Number(btn.dataset.week);
+    render();
+  });
+});
+document.querySelectorAll('[data-group]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('[data-group]').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    state.group = btn.dataset.group;
+    render();
+  });
+});
+render();
+renderLegend();
+</script>
+</body>
+</html>
